@@ -67,5 +67,8 @@ io.sockets.on "connection", (socket) ->
   stream.on "tweet", streamEmitter
   stream.on "delete", (id) -> socket.emit "delete", id
   stream.on "friends", (friends) -> socket.emit "friends", friends
+  socket.on "tweet", (text) ->
+    t.updateStatus text, (data) ->
+      socket.emit "tweetresult", data
   socket.on "disconnect", ->
     stream.removeListener "data", streamEmitter

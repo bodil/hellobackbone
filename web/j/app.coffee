@@ -44,13 +44,26 @@ define ["jquery", "underscore", "backbone", "cs!twitter"
     removeTweet: (tweet) =>
       tweet.view.remove()
 
+  class Input extends Backbone.View
+    events:
+      "keydown": "onKeydown"
+
+    onKeydown: (e) =>
+      if e.keyCode == 13
+        text = @$el.val()
+        @$el.val("")
+        twitter.tweet(text)
+
   window.tweets = tweets = new Tweets()
 
   window.list = list = new TweetList
     collection: tweets
     el: $("#tweets")
 
-  twitter = new Twitter()
+  window.input = input = new Input
+    el: $("#entry")
+
+  twitter = new Twitter
   twitter.on "tweet", (tweet) ->
     tweets.add(new Tweet(tweet))
   twitter.on "delete", (id) ->
