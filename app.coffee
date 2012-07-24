@@ -15,9 +15,8 @@ app.use express.static "#{__dirname}/web"
 app.get "/", (req, res) ->
   res.sendfile("#{__dirname}/web/index.html")
 
-io = io.listen app
 port = parseInt(process.env.PORT, 10) or 1337
-app.listen port
+io = io.listen app.listen port
 console.log "Listening on http://localhost:#{port}/"
 
 twitter_config = JSON.parse(fs.readFileSync(path.join(process.env.HOME, ".twitter-auth.json"), "utf8"))
