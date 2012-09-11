@@ -1,3 +1,4 @@
+http = require "http"
 express = require "express"
 io = require "socket.io"
 twitter = require "twitter"
@@ -7,7 +8,7 @@ fs = require "fs"
 path = require "path"
 _ = require "underscore"
 
-app = express.createServer()
+app = express()
 app.use express.bodyParser()
 app.use express.errorHandler()
 app.use express.static "#{__dirname}/web"
@@ -15,8 +16,9 @@ app.use express.static "#{__dirname}/web"
 app.get "/", (req, res) ->
   res.sendfile("#{__dirname}/web/index.html")
 
+server = http.createServer(app)
 port = parseInt(process.env.PORT, 10) or 1337
-io = io.listen app.listen port
+io = io.listen server.listen port
 console.log "Listening on http://localhost:#{port}/"
 
 twitter_config = JSON.parse(fs.readFileSync(path.join(process.env.HOME, ".twitter-auth.json"), "utf8"))
